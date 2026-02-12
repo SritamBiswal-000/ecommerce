@@ -37,10 +37,31 @@ const getUserByIdController = async (req, res) => {
 	res.status(200).json({ message: "Successfully got the user", result });
 };
 
+const updateUserController = async (req, res) => {
+	// task1: implement update user functionality 
+	// argument: id, req.body (name, email, password)
+	// requirements: 
+	// 1. user should be able to update name, email, password (anyone or all)
+	// 2. there should be check for email (if email is updated then check for email already exists)
+
+	res.status(501).json({ message: "Not implemented" })
+}
+
+const deleteUserController = async (req, res) => {
+	// task2: implement delete user functionality 
+	// argument: id
+	// requirements: 
+	// 1. user should be able to delete user
+	// 2. there should be check for user exists
+	res.status(501).json({ message: "Not implemented" })
+}
+
 module.exports = {
 	createUserController,
 	getUsersController,
 	getUserByIdController,
+	updateUserController,
+	deleteUserController
 };
 
 // if i want to use await i need to have the method to be async
