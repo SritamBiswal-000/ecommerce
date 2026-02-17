@@ -1,4 +1,4 @@
-const { createProductService, getAllProductsService, getProductService } = require('../service/product.service')
+const { createProductService, getAllProductsService, getProductService, updateProductService, deleteProductService } = require('../service/product.service')
 
 const createProductController = async (req, res) => {
     const result = await createProductService(req.body)
@@ -36,14 +36,32 @@ const getProductController = async (req, res) => {
 }
 
 const updateProductController = async (req, res) => {
-    res.status(501).json({
-        message: "Not Implemented"
+    const {id} = req.params;
+    const productData = req.body;
+    const result = await updateProductService(id,productData);
+    if(result === "Product Doesn't Exist"){
+        res.status(400).json({
+            message: "Product not found"
+        })
+    }
+    res.status(200).json({
+        message: "Product Updated Successfully",
+        product: result
     })
+    
 }
 
 const deleteProductController = async (req, res) => {
-    res.status(501).json({
-        message: "Not Implemented"
+    const {id} = req.params;
+    const result = await deleteProductService(id);
+    if(result === "Product not found"){
+        res.status(400).json({
+            message: "Product not found"
+        })
+    }
+    res.status(200).json({
+        message: "Product deleted successfully",
+        product: result
     })
 }
 
