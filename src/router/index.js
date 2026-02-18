@@ -2,10 +2,12 @@ const express = require('express')
 const router = express.Router()
 const userRouter = require('./v1/user.router')
 const productRouter = require('./v1/product.router')
+const cartRouter = require('./v1/cart.router')
 
 
 router.use('/users', userRouter)
 router.use('/products', productRouter)
+router.use('/carts', cartRouter)
 
 // http://localhost:3001/api/v1/users
 
