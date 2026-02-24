@@ -1,14 +1,15 @@
 const { createCartRepository, getCartRepository, updateCartTotalAmountRepository } = require("../repository/cart.repository")
 const { getProductRepository } = require("../repository/product.repository")
 const { getCartItemRepository, getCartItemsRepository, createCartItemRepository, updateCartItemQuantityRepository } = require('../repository/cartitem.repository')
+const { BadRequestError, NotFoundError, ConflictError, UnprocessableEntityError } = require('../utils/app.error')
 
 const addToCartService = async (userId, productId) => {
     const product = await getProductRepository(productId)
     if (!product) {
-        return "Product not found!"
+        throw new NotFoundError('Product not found!')
     }
     if (product.stock <= 0) {
-        return "Product is out of stock!"
+        throw new UnprocessableEntityError("Product is out of stock!")
     }
     let cart = await getCartRepository(userId)
     if (!cart) {
@@ -19,7 +20,9 @@ const addToCartService = async (userId, productId) => {
         const newQuantity = cartItem.quantity + 1
         const newPrice = product.price
         if (newQuantity > product.stock) {
-            return "Cannot add more of this product due to limited stock"
+            throw new UnprocessableEntityError(
+                "Cannot add more of this product due to limited stock"
+            )
         }
         await updateCartItemQuantityRepository(cartItem.id, { quantity: newQuantity, price: newPrice })
     } else {
