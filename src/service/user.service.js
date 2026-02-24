@@ -1,9 +1,10 @@
 const { createUserRepository, getUsersRepository, findUserByEmailRepository, findUserByIdRepository, updateUserRepository, deleteUserRepository } = require('../repository/user.repository')
+const { BadRequestError } = require('../utils/app.error')
 
 const createUserService = async (user) => {
     const userExists = await findUserByEmailRepository(user.email)
     if (userExists) {
-        return "User already exists"
+        throw new BadRequestError("User already exists")
     }
     return await createUserRepository(user)
 }
@@ -15,7 +16,7 @@ const getUsersService = async () => {
 const getUserByIdService = async (id) => {
     const user = await findUserByIdRepository(id)
     if (!user) {
-        return "User doesn't exists"
+        throw new BadRequestError("User doesn't exists")
     }
     return user
 }
@@ -23,7 +24,7 @@ const getUserByIdService = async (id) => {
 const updateUserService = async (id, user) => {
     const userExists = await findUserByIdRepository(id)
     if (!userExists) {
-        return "User doesn't exists"
+        throw new BadRequestError("User doesn't exists")
     }
     const updatedUser = await updateUserRepository(id, user)
     if (updatedUser[0] === 1) return true
@@ -33,7 +34,7 @@ const updateUserService = async (id, user) => {
 const deleteUserService = async (id) => {
     const userExists = await findUserByIdRepository(id)
     if (!userExists) {
-        return "User doesn't exists"
+        throw new BadRequestError("User doesn't exists")
     }
     const deletedUser = await deleteUserRepository(id)
     if (deletedUser) return true

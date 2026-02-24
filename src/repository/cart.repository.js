@@ -4,12 +4,16 @@ const getCartRepository = async (userId) => {
     return await CartModel.findOne({ where: { userId } })
 }
 
-const createCartRepository = async (cart) => {
-    return await CartModel.create(cart)
+const createCartRepository = async (userId) => {
+    return await CartModel.create({ userId, totalAmount: 0 })
 }
 
+const updateCartTotalAmountRepository = async (cartId, totalAmount) => {
+    return await CartModel.update({ totalAmount }, { where: { id: cartId } })
+}
 
 module.exports = {
     getCartRepository,
-    createCartRepository
+    createCartRepository,
+    updateCartTotalAmountRepository
 }
