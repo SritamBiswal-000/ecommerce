@@ -1,4 +1,5 @@
 const { createProductService, getAllProductsService, getProductService, updateProductService, deleteProductService } = require('../service/product.service')
+const { StatusCodes } = require("http-status-codes");
 
 const createProductController = async (req, res) => {
     const result = await createProductService(req.body)

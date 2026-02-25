@@ -9,6 +9,7 @@ const getAllProductsRepository = async () => {
 }
 
 const getProductRepository = async (id) => {
+    console.log("entered getProductRepository")
     return await Product.findByPk(id)
 }
 
