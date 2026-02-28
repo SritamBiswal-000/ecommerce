@@ -13,7 +13,6 @@ const getUsersRepository = async () => {
 };
 
 const findUserByIdRepository = async (id) => {
-	console.log("userrepo")
 	return await User.findByPk(id);
 };
 
@@ -22,7 +21,6 @@ const updateUserRepository = async (id, user) => {
 };
 
 const deleteUserRepository = async (id) => {
-	console.log("deleteuser")
 	return await User.destroy({ where: { id } });
 };
 
