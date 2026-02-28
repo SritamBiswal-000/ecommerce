@@ -24,7 +24,7 @@ const addToCartService = async (userId, productId) => {
     if (cartItem) {
         const newQuantity = cartItem.quantity + 1
         const newPrice = product.price
-        if (product.stock <= 0) {
+        if (newQuantity > product.stock) {
             throw new UnprocessableEntityError(
                 "Cannot add more of this product due to limited stock"
             )
