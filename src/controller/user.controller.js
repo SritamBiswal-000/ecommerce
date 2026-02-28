@@ -21,26 +21,26 @@ const createUserController = async (req, res) => {
 const getUsersController = async (req, res) => {
 
 	const users = await getUsersService();
-	res.status(200).json({ message: "All users", users });
+	res.status(StatusCodes.OK).json({ message: "All users", users });
 };
 
 const getUserByIdController = async (req, res) => {
 	const { id } = req.params;
 	const result = await getUserByIdService(id);
-	res.status(200).json({ message: "Successfully got the user", result });
+	res.status(StatusCodes.OK).json({ message: "Successfully got the user", result });
 };
 
 const updateUserController = async (req, res) => {
 	const { id } = req.params;
 	const userData = req.body;
 	const result = await updateUserService(id, userData);
-	res.status(200).json({ message: "Successfully updated the user", result });
+	res.status(StatusCodes.OK).json({ message: "Successfully updated the user", result });
 }
 
 const deleteUserController = async (req, res) => {
 	const { id } = req.params;
 	const result = await deleteUserService(id);
-	res.status(200).json({ message: "Successfully deleted the user", result });
+	res.status(StatusCodes.OK).json({ message: "Successfully deleted the user", result });
 }
 
 module.exports = {

@@ -32,8 +32,10 @@ const updateUserService = async (id, user) => {
 }
 
 const deleteUserService = async (id) => {
+    console.log("user")
     const userExists = await findUserByIdRepository(id)
     if (!userExists) {
+        console.log("error")
         throw new BadRequestError("User doesn't exists")
     }
     const deletedUser = await deleteUserRepository(id)
