@@ -1,14 +1,20 @@
 const { createCartRepository, getCartRepository, updateCartTotalAmountRepository } = require("../repository/cart.repository")
-const { getProductRepository } = require("../repository/product.repository")
+const { getProductRepository, updateProductRepository } = require("../repository/product.repository")
 const { getCartItemRepository, getCartItemsRepository, createCartItemRepository, updateCartItemQuantityRepository } = require('../repository/cartitem.repository')
+const { findUserByIdRepository } = require("../repository/user.repository")
+const { NotFoundError, UnprocessableEntityError, BadRequestError } = require('../utils/app.error')
 
 const addToCartService = async (userId, productId) => {
+    const user = await findUserByIdRepository(userId)
+    if (!user) {
+        throw new BadRequestError("user doesn't exist")
+    }
     const product = await getProductRepository(productId)
     if (!product) {
-        return "Product not found!"
+        throw new NotFoundError("Product not found!")
     }
     if (product.stock <= 0) {
-        return "Product is out of stock!"
+        throw new UnprocessableEntityError("Product is out of stock!")
     }
     let cart = await getCartRepository(userId)
     if (!cart) {
@@ -19,7 +25,9 @@ const addToCartService = async (userId, productId) => {
         const newQuantity = cartItem.quantity + 1
         const newPrice = product.price
         if (newQuantity > product.stock) {
-            return "Cannot add more of this product due to limited stock"
+            throw new UnprocessableEntityError(
+                "Cannot add more of this product due to limited stock"
+            )
         }
         await updateCartItemQuantityRepository(cartItem.id, { quantity: newQuantity, price: newPrice })
     } else {
@@ -30,8 +38,11 @@ const addToCartService = async (userId, productId) => {
             price: product.price
         })
     }
+    await updateProductRepository(productId, { stock: product.stock - 1 })
     const totalAmount = await calculateTotalAmountService(cart.id)
     await updateCartTotalAmountRepository(cart.id, totalAmount)
+    cart = await getCartRepository(userId)
+    return cart
 }
 
 const calculateTotalAmountService = async (cartId) => {
@@ -50,5 +61,5 @@ const getCartService = async (userId) => {
 
 module.exports = {
     addToCartService,
-    getCartService
+    getCartService,
 }
