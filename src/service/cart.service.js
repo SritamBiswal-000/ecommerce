@@ -62,5 +62,4 @@ const getCartService = async (userId) => {
 module.exports = {
     addToCartService,
     getCartService,
-    calculateTotalAmountService
 }
